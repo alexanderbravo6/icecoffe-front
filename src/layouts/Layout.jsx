@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router-dom'
 import { Navbar } from 'flowbite-react';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import Sidebar from '../components/Sidebar';
 import Resumen from '../components/Resumen';
 import useQuiosco from '../hooks/useQuiosco';
 import Modal from 'react-modal';
 import ModalProducto from '../components/ModalProducto';
+
 
 const customStyles = {
     content: {
@@ -21,7 +24,7 @@ Modal.setAppElement('#root')
 
 export default function Layout() {
 
-    const { modal,handleClickModal } = useQuiosco();
+    const { modal } = useQuiosco();
 
 
 
@@ -58,7 +61,7 @@ export default function Layout() {
                 <Modal isOpen={modal} style={customStyles}>
                    <ModalProducto />
                 </Modal>
-
+            <ToastContainer />
         </>
     )
 }
