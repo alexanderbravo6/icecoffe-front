@@ -1,5 +1,5 @@
 
-import { createContext, useState } from 'react'
+import { createContext, useState , useEffect  } from 'react'
 import { categorias as categoriasDB } from "../data/categorias"
 import { toast } from 'react-toastify';
 const QuioscoContext = createContext();
@@ -11,6 +11,12 @@ const QuioscoProvider = ({ children }) => {
     const [modal, setModal] = useState(false);
     const [producto, setProducto] = useState({});
     const [pedido, setPedido] = useState([]);
+    const [total, setTotal] = useState(0);
+
+
+    //cada que el pedido cambie queremos que esta función se ejecute
+
+
 
     //señalizar una función
     const handleClickCategoria = id => {
@@ -24,23 +30,35 @@ const QuioscoProvider = ({ children }) => {
         setProducto(producto)
     }
     //Eliminar elementos de un objeto
-    const handleAgregarPedido = ({ categoria_id, imagen, ...producto }) => {
+    const handleAgregarPedido = ({ categoria_id, ...producto }) => {
 
-        if(pedido.some( pedidoState => pedidoState.id === producto.id)){
+        if (pedido.some(pedidoState => pedidoState.id === producto.id)) {
             //map permite iterar sobre todos los elementos
             const pedidoActualizado = pedido.map(pedidoState => pedidoState.id === producto.id ? producto : pedidoState)
 
             setPedido(pedidoActualizado)
             toast.success('Guardado Correctamente')
-          
-        }else{
+
+        } else {
             setPedido([...pedido, producto])
             toast.success('Agregado al pedido')
         }
     }
-    const handleEditarPedido =({ 
-        
-    })
+    const handleEditarCantidad = id => {
+        const productoActualizar = pedido.filter(producto => producto.id === id)[0]
+        setProducto(productoActualizar)
+        !setModal(!modal);
+    }
+
+    const handleEliminarProductoPedido = id => {
+        const pedidoActualizado = pedido.filter(producto => producto.id !== id)
+        setPedido(pedidoActualizado)
+        toast.error('Producto Eliminado')
+    }
+    useEffect (() =>{
+        const nuevoTotal =  pedido.reduce((total,producto) => (producto.precio * producto.cantidad ) + total , 0 )
+        setTotal(nuevoTotal)
+    },[pedido])
 
     return (
         <QuioscoContext.Provider
@@ -51,9 +69,12 @@ const QuioscoProvider = ({ children }) => {
                 modal,
                 pedido,
                 handleClickModal,
+                handleEliminarProductoPedido,
                 producto,
                 handleSetProducto,
-                handleAgregarPedido
+                handleAgregarPedido,
+                handleEditarCantidad,
+                total
             }}
         >
             {children}
