@@ -2,6 +2,7 @@
 import { createContext, useState , useEffect  } from 'react'
 import { categorias as categoriasDB } from "../data/categorias"
 import { toast } from 'react-toastify';
+import confetti from 'canvas-confetti';
 const QuioscoContext = createContext();
 
 const QuioscoProvider = ({ children }) => {
@@ -38,10 +39,12 @@ const QuioscoProvider = ({ children }) => {
 
             setPedido(pedidoActualizado)
             toast.success('Guardado Correctamente')
+            confetti()
 
         } else {
             setPedido([...pedido, producto])
             toast.success('Agregado al pedido')
+            confetti()
         }
     }
     const handleEditarCantidad = id => {

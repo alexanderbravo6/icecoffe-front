@@ -9,6 +9,11 @@ import Modal from 'react-modal';
 import ModalProducto from '../components/ModalProducto';
 
 
+
+async function loadPost(){
+    await new Promise(resolve => setTimeout(resolve, 3000));
+}
+
 const customStyles = {
     content: {
         top: "50%",
@@ -22,10 +27,11 @@ const customStyles = {
 
 Modal.setAppElement('#root')
 
-export default function Layout() {
+export default async function Layout() {
 
     const { modal } = useQuiosco();
 
+    await loadPost()
 
 
 
@@ -58,9 +64,9 @@ export default function Layout() {
                     <Resumen />
                 </div>
             </div>
-                <Modal isOpen={modal} style={customStyles}>
-                   <ModalProducto />
-                </Modal>
+            <Modal isOpen={modal} style={customStyles}>
+                <ModalProducto />
+            </Modal>
             <ToastContainer />
         </>
     )
